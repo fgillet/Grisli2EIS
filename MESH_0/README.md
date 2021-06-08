@@ -76,4 +76,9 @@ Eventually the mesh can be converted to polygons and imported in e.g. QGIS, see 
 
 ## Requirements 
 
-
+softwares and tools required:  
+- gmsh  
+- nco  
+- gdal
+- python with **numpy** and **shapefile**
+- [Contour2geo.py](https://github.com/ElmerCSC/elmerfem/blob/devel/elmerice/Meshers/GIS/Contour2geo.py)
