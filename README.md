@@ -17,5 +17,7 @@ Contains codes and configuration files to transfer model results from GRISLI
 ## Contents
 
 * [Codes](./src): Usefull source codes
-* [MESH_0](./MESH_0): Create initial Elmer mesh from GRISLI ice-sheet mask
+* [MESH_0](./MESH_0): Create initial Elmer mesh from GRISLI ice-sheet mask  
+* [AverageViscosity](./AverageViscosity): Compute the depth-averaged viscosity to use with the Elemer/Ice [SSA Solver](http://elmerfem.org/elmerice/wiki/doku.php?id=solvers:ssa)
+
 

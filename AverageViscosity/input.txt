@@ -1,0 +1,62 @@
+!###############################
+!# File informations
+!###############################
+&FILE
+!## input File Name
+  FName='IceTemperature.nc',
+
+!## dim names
+!   default= x,y,z
+  xdimName='x',
+  ydimName='y',
+  zdimName='nzzm',
+
+!## var names
+!   default= x,y,z
+  xvarName='x',
+  yvarName='y',
+  zvarName='nzzm',
+
+!## Temperature variable Name
+  TvarName='T'
+  TinCelsius=.TRUE.
+
+!## Output File Name
+
+ OName='AverageViscosity.nc',
+
+/
+
+!###################################################
+!# Glen Flow law parameters (unit system: m a MPa)
+####################################################
+!# Paterson 2010 (default):     | Parterson 1994:
+!A1 = 8983744210015.2 ;         | A1=1.25757036e13
+!Q1 = 60.0e03. ;                | Q1=60.0e03
+!A2 = 7.43393850060239e+23 ;    | A2=6.04643616e28
+!Q2 = 115.0e03,                 | Q2=139.0e03
+!###################################################
+&Glen_input
+
+!## Rate Factors
+A1=1.25757036e13,
+A2=6.04643616e28, 
+
+!## Activation energy
+Q1=60.0e03,
+Q2=139.0e03,
+
+!## Threshold temperature
+Tlimit=263.15,
+
+!## Glen index
+Glen_n=3.0,
+
+!## Enhencement Factor
+EhF=1.0,
+
+!## Gas Constant 
+R=8.314,
+
+/
+
