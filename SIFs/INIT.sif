@@ -1,0 +1,165 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Initialise required variables to Elmer/Ice simulations 
+!  solving the SSA quations for the force balance
+!
+! Author: F. Gillet-Chaulet (IGE-Grenoble-FR)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! INPUT PARAMETERS:
+!   GRISLI_FILE=<GRISLI_FILE>
+!   VISCOSITY_FILE=<VISCOSITY_FILE>
+!   sea level=<Zsea>
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!#######################################################
+!!# Parameters
+! Mesh directory
+$MESH="mesh"
+! Minimal ice thickness
+$HMin=0.9
+! Data sets to be interpolated on the mesh
+$GRISLI="<GRISLI_FILE>"
+$VISCOSITY="<VISCOSITY_FILE>"
+! sea level elevation
+$zsl=<Zsea>
+!#######################################################
+include ../Parameters/Physical_Params.IN
+!#######################################################
+Header
+  Mesh DB "." "$MESH$"
+End
+!#######################################################
+!#######################################################
+Constants
+  sea level = Real $zsl
+  water density = Real $rhow
+End
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Simulation
+  Coordinate System  = Cartesian 
+  Simulation Type = Steady State
+
+  Steady State Min Iterations = 1
+  Steady State Max Iterations = 1
+
+  Output File = "RUN0_.result"
+  Post File = "RUN0_.vtu"
+  max output level = 6
+End
+!#######################################################
+!#######################################################
+Body 1
+  Equation = 1
+  Material = 1
+  Initial Condition = 1
+End
+!#######################################################
+!#######################################################
+Initial Condition 1
+! List of variable that must be initialised
+! to run the simulations
+ 
+ ! Topography
+  bedrock = Real -9999.9 ! bed elevation
+  H = Real -9999.9 ! ice thickness
+  GroundedMask = Real -9999.9 ! grounded/floating mask
+  Zs= Real -9999.9 ! top surface elevation
+  Zb= Real -9999.9 ! bottom surace elavation
+ ! Material parameters
+  slc0=Real -9999.9 ! slip coefficient
+  Mu= Real  -9999.9 ! vertically averaged velocity
+
+ ! 
+End
+!#######################################################
+!#######################################################
+Material 1
+! Material properties
+  SSA Mean Density = Real $rhoi
+End
+!#######################################################
+!#######################################################
+!#######################
+! Read bedrock
+!#######################
+Solver 1
+  Equation = Reader
+    Procedure = "GridDataReader" "GridDataReader"
+    Variable = -nooutput dumy
+
+   Read full array = logical True
+!---- NOTE: File is case sensitive, String is not!
+   Filename = File "$GRISLI$"
+
+   X Dim Name = File "x"
+   Y Dim Name = File "y"
+   Time Dim Name = File "time"
+
+   Time Point = Real 1.0
+   Is Time Index = Logical True
+!---
+  Variable 1 = File "Bsoc"
+  Target Variable 1 = String "bedrock"
+  Exported Variable 1 = bedrock
+
+  Variable 2 = File "Bm"
+  Target Variable 2 = String "smb"
+  Exported Variable 2 = smb
+
+! convert from
+  Variable 3 = File "beta_c"
+  Target Variable 3 = String "slc0"
+  Interpolation Multiplier 3 = Real $1.0e-6
+  Exported Variable 3 = "slc0"
+
+End
+!#######################
+! Read thickness
+!#######################
+Solver 2
+  Equation = Reader2
+    Procedure = "Scattered2DDataInterpolator" "Scattered2DDataInterpolator"
+    Variable = -nooutput dumy2
+  
+  Variable 1 = File "H"
+  Variable 1 data file = File "$GRISLI$"
+  Variable 1 Valid Min Value  = Real $HMin
+  Target Variable 1  = String "H"
+
+! exported variables
+  Exported Variable 1 = H
+End
+Solver 3
+  Equation = Reader3
+    Procedure = "GridDataReader" "GridDataReader"
+    Variable = -nooutput dumy
+
+   Read full array = logical True
+!---- NOTE: File is case sensitive, String is not!
+   Filename = File "$VISCOSITY$"
+
+   X Dim Name = File "x"
+   Y Dim Name = File "y"
+!---
+  Variable 1 = File "Mumean"
+  Target Variable 1 = String "Mu"
+  Exported Variable 1 = Mu
+End
+!#######################
+! Apply floatation 
+!  - define GroundedMask
+!  - get Zs and Zb from H and bedrock
+!#######################
+Solver 4
+   Equation = "Flotation"
+      Variable = GroundedMask
+      Procedure = "ElmerIceSolvers" "Flotation"
+
+   Exported Variable 1 = Zs
+   Exported Variable 2 = Zb
+End
+
+!#######################################################
+!#######################################################
+Equation 1
+  Active Solvers(4) = 1 2 3 4
+End
+

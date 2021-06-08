@@ -1,0 +1,15 @@
+
+   Linear System Solver = Iterative
+   Linear System Iterative Method = CG
+   Linear System Preconditioning = ILU2
+   Linear System Max Iterations = 200
+   Linear System Convergence Tolerance = Real 1.0e-08
+   Linear System Abort Not Converged = False
+
+   Nonlinear System Max Iterations = 20
+   Nonlinear System Convergence Tolerance  = 1.0e-05
+   Nonlinear System Newton After Iterations = 3
+   Nonlinear System Newton After Tolerance = 1.0e-02
+   Nonlinear System Relaxation Factor = 1.00
+
+   Nonlinear System Abort Not Converged = Logical True

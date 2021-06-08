@@ -1,0 +1,16 @@
+ !# Linear system
+   Linear System Solver = Iterative
+
+   Linear System Iterative Method = CG
+   Linear System Preconditioning = ILU2
+
+   Linear System Max Iterations = 200
+   Linear System Abort Not Converged = False
+   
+   ! required for limitation ; even with direct solver
+   Linear System Convergence Tolerance = 1.0e-10
+
+ !# Non Linear system
+   ! equation is linear if no min/max
+    Nonlinear System Max Iterations = 10
+    Nonlinear System Convergence Tolerance  = 1.0e-08
