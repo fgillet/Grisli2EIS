@@ -18,13 +18,19 @@ echo "sea level elevation: " $sl
 ViscosityFile="${SRC_DIR}/DATA/AverageViscosity.nc"
 
 
+## Get .sif files to initialise input variables:
 sed  "s/<GRISLI_FILE>/$(escapeSubst "$GRISLI")/g;\
       s/<VISCOSITY_FILE>/$(escapeSubst "$ViscosityFile")/g;\
       s/<Zsea>/$sl/g"\
       ${SRC_DIR}/SIFs/INIT.sif > INIT.sif
 
 
+## Get .sif files to run a basic control experiment
 sed  "s/<Zsea>/$sl/g"\
      ${SRC_DIR}/SIFs/CTRL.sif > CTRL.sif
 cp ${SRC_DIR}/SIFs/H_numerics.sif .
 cp ${SRC_DIR}/SIFs/SSA_numerics.sif .
+
+
+## get a mesh
+cp -r ../MESH_0/mesh .
