@@ -3,3 +3,6 @@
 *.shp 
 *.dbf
 *.qgz
+*.msh
+*.vtu
+mesh
