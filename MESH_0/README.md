@@ -39,7 +39,7 @@ ExtractPolygon
 This step creates:  
 - contour.shp: a polygon shapefile of the ice sheet.
 
-Remark: Eventually if the polygon has holes they have to be removed; this can be done in QGIS with the toolbox.
+**Remark:** Eventually if the polygon has holes they have to be removed; this can be done in QGIS using *"Delete Holes"* from the toolbox.
 
 2. Step 2 : Convert polygon to gmsh .geo file  
 
